@@ -1,6 +1,5 @@
 CreateThread(function()
     while true do
-        if LocalPlayer.state.isLoaded then
             SetVehicleDensityMultiplierThisFrame(Config.Density['Vehicle'])
             SetPedDensityMultiplierThisFrame(Config.Density['Peds'])
             SetParkedVehicleDensityMultiplierThisFrame(Config.Density['Parked'])
@@ -11,7 +10,6 @@ CreateThread(function()
             Wait(5000)
         end
         Wait(1)
-	end
 end)
 
 function SetDensity(Type, Value)
