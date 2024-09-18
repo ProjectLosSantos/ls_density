@@ -54,7 +54,7 @@ CreateThread(function()
         if wasNight ~= isNight then
             local densitySettings = getClosestConfig(playersAmount)
             if densitySettings == nil then
-                print('something wrong with the config')
+                print('[DENSITY] Something wrong with the config')
                 break
             end
 
