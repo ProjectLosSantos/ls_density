@@ -6,10 +6,6 @@ CreateThread(function()
             SetScenarioPedDensityMultiplierThisFrame(Config.Density['Scenario'], Config.Density['Scenario'])
             SetVehicleModelIsSuppressed(GetHashKey("blimp"), true)
             Wait(1000) -- resarching showed that this shit can be waited for 1000
-        else
-            Wait(5000)
-        end
-        Wait(1)
 end)
 
 function SetDensity(Type, Value)
