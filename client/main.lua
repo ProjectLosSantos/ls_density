@@ -1,73 +1,39 @@
-local config = require 'config'
-
-local function getClosestConfig(playerCount)
-    local closestKey = nil
-    local minDiff = math.huge
-
-    for key, _ in pairs(config.timeDensities) do
-        local diff = key - playerCount
-        if diff >= 0 then
-            if diff < minDiff then
-                minDiff = diff
-                closestKey = key
-            end
-        end
-    end
-
-    if closestKey then
-        return config.timeDensities[closestKey]
-    else
-        return nil
-    end
-end
-
-
 CreateThread(function()
     while true do
-        SetVehicleDensityMultiplierThisFrame(config.density.vehicle)
-        SetPedDensityMultiplierThisFrame(config.density.peds)
-        SetParkedVehicleDensityMultiplierThisFrame(config.density.parked)
-        SetScenarioPedDensityMultiplierThisFrame(config.density.scenario, config.density.scenario)
-        SetVehicleModelIsSuppressed(GetHashKey("blimp"), true)
-        Wait(1000)
+            -- Use the values from the config
+            SetVehiclePopulationBudget(Config.Density.vehBudget)
+            SetPedPopulationBudget(Config.Density.pedBudget)
+            Wait(1000) -- A 1000ms wait is acceptable based on research
+        Wait(1)
     end
 end)
 
-exports("setDensity", setDensity)
-
-function setDensity(type, value)
-    if not config.density[type] then return false end
-    if type(value) ~= 'number' then return false end
-    print(string.format('[DENSITY] Type:%s Value:%s', type, value))
-
-    config.density[type] = value
+function SetDensity(Type, Value)
+    if Config.Density[Type] == Value then
+        return
+    end
+    print(string.format('[DENSITY] Type:%s Value:%s', Type, Value))
+    Config.Density[Type] = Value
 end
+exports("SetDensity", SetDensity)
 
 CreateThread(function()
     local wasNight = nil
 
     while true do
-        Wait(10000)
+        Wait(5000)
         local hour = GetClockHours()
-        local isNight = (hour >= config.nightStart or hour < config.nightEnd)
-        local playersAmount = #GetActivePlayers()
-        if wasNight ~= isNight then
-            local densitySettings = getClosestConfig(playersAmount)
-            if densitySettings == nil then
-                print('[DENSITY] Something wrong with the config')
-                break
-            end
+        local isNight = (hour >= Config.nightStart or hour < Config.nightEnd)
 
+        if wasNight ~= isNight then
             if isNight then
-                setDensity('vehicle', densitySettings.night.vehicle)
-                setDensity('parked', densitySettings.night.parked)
-                setDensity('peds', densitySettings.night.peds)
-                setDensity('scenarios', densitySettings.night.scenarios)
+                -- Set densities for night
+                SetDensity('vehBudget', Config.TimeDensities.Night.vehBudget)
+                SetDensity('pedBudget', Config.TimeDensities.Night.pedBudget)
             else
-                setDensity('vehicle', densitySettings.day.vehicle)
-                setDensity('parked', densitySettings.day.parked)
-                setDensity('peds', densitySettings.day.peds)
-                setDensity('scenarios', densitySettings.day.scenarios)
+                -- Set densities for day
+                SetDensity('vehBudget', Config.TimeDensities.Day.vehBudget)
+                SetDensity('pedBudget', Config.TimeDensities.Day.pedBudget)
             end
             wasNight = isNight
         end
