@@ -1,65 +1,26 @@
-local config = {}
+Config = {}
 
-config.density = {
-    vehicle = 0.55,
-    parked = 1.0,
-    peds = 1.0,
-    scenario = 0.55,
+--budgetLevel: Ranges from 0 to 3, where 0 is lowest (no peds/veh) and 3 is the full budget level.
+
+--All density config
+Config.Density = {
+    vehBudget = 0.5,
+    pedBudget = 0.5
 }
 
 -- Night starts at 20:00 (8 PM)
-config.nightStart = 20
+Config.nightStart = 20
 
 -- Night ends at 06:00 (6 AM)
-config.nightEnd = 6
+Config.nightEnd = 6
 
-config.timeDensities = {
-
-    [10] = {
-        night = {
-            vehicle = 0.25,
-            parked = 1.0,
-            peds = 0.1,
-            scenarios = 0.25
-        },
-        day = {
-            vehicle = 0.55,
-            parked = 0.25,
-            peds = 0.70,
-            scenarios = 0.55
-        }
+Config.TimeDensities = {
+    Night = {
+        vehBudget = 0.2,
+        pedBudget = 0.1
     },
-
-    -- [20] = {
-    --     night = {
-    --         vehicle = 0.25,
-    --         parked = 1.0,
-    --         peds = 0.1,
-    --         scenarios = 0.25
-    --     },
-    --     day = {
-    --         vehicle = 0.55,
-    --         parked = 0.25,
-    --         peds = 0.70,
-    --         scenarios = 0.55
-    --     }
-    -- },
-
-    -- [30] = {
-    --     night = {
-    --         vehicle = 0.25,
-    --         parked = 1.0,
-    --         peds = 0.1,
-    --         scenarios = 0.25
-    --     },
-    --     day = {
-    --         vehicle = 0.55,
-    --         parked = 0.25,
-    --         peds = 0.70,
-    --         scenarios = 0.55
-    --     }
-    -- }
+    Day = {
+        vehBudget = 0.5,
+        pedBudget = 0.5
+    }
 }
-
-
-return config
